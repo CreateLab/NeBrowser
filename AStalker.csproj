@@ -4,6 +4,7 @@
         <TargetFramework>netcoreapp3.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
+        <Folder Include="Converters" />
         <Folder Include="Models\" />
         <Compile Update="**\*.xaml.cs">
             <DependentUpon>%(Filename)</DependentUpon>
