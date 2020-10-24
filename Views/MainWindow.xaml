@@ -3,6 +3,7 @@
         xmlns:vm="clr-namespace:AStalker.ViewModels;assembly=AStalker"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AStalker.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -22,33 +23,47 @@
             <MenuItem Header="File" />
         </Menu>
         <!--Send row-->
-        <Grid Grid.Row="1" Margin="5" />
+        <styles:Card Grid.Row="1" Margin="5">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!--Request Type-->
+                <ComboBox />
+                <TextBox Grid.Column="1" Watermark="Enter request URL" />
+                <Button Grid.Column="2" Margin="5, 0, 0, 0">Send</Button>
+            </Grid>
+        </styles:Card>
         <!--Body-->
-        <Grid Grid.Row="2" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <TabControl>
-                <TabItem Header="Headers" />
-                <TabItem Header="Body" />
-                <TabItem Header="Cookies" />
-            </TabControl>
-            <GridSplitter Grid.Row="1" Height="3" />
-            <Grid Grid.Row="2">
+        <styles:Card Grid.Row="2" Margin="5">
+            <Grid Margin="5">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock Margin="5" />
-                <TabControl Grid.Row="1">
+                <TabControl>
                     <TabItem Header="Headers" />
                     <TabItem Header="Body" />
                     <TabItem Header="Cookies" />
                 </TabControl>
+                <GridSplitter Grid.Row="1" Height="3" />
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" />
+                    <TabControl Grid.Row="1">
+                        <TabItem Header="Headers" />
+                        <TabItem Header="Body" />
+                        <TabItem Header="Cookies" />
+                    </TabControl>
+                </Grid>
             </Grid>
-        </Grid>
+        </styles:Card>
     </Grid>
 
 </Window>
