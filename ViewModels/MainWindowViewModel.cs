@@ -66,7 +66,8 @@ namespace NeBrowser.ViewModels
             Source.ToObservableChangeSet()
                 .Bind(out _headers)
                 .Throttle(TimeSpan.FromSeconds(1))
-                .Subscribe(/*_ => UpdateURL()*/);
+                .ToCollection()
+                .Subscribe(c => UpdateURL(c));
         }
 
         private void UpdateParams()
@@ -76,16 +77,18 @@ namespace NeBrowser.ViewModels
             Source.Clear();
             foreach (var key in qObj.AllKeys)
             {
-                Source.Add(new Header{Key = key, Value = qObj[key]});
+                Source.Add(new Header {Key = key, Value = qObj[key]});
             }
         }
-        // private void UpdateURL()
-        // {
-        //     if (Headers.Count == 0) return;
-        //     var host = (new Uri(_url)).Host;
-        //     Url = QueryHelpers.AddQueryString(host,
-        //         _headers.ToDictionary(header => header.Key, header => header.Value));
-        // }
+
+        private void UpdateURL(IReadOnlyCollection<Header> readOnlyCollection)
+        {
+            if (readOnlyCollection.Count == 0) return;
+            var url = new Uri(_url);
+            var path = $"{url.Scheme}{Uri.SchemeDelimiter}{url.Authority}{url.AbsolutePath}";
+            Url = QueryHelpers.AddQueryString(path,
+                readOnlyCollection.ToDictionary(header => header.Key, header => header.Value));
+        }
 
         private async Task SendRequest()
         {
