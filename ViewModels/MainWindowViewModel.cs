@@ -28,6 +28,9 @@ namespace NeBrowser.ViewModels
         private readonly HttpClient _client = new HttpClient();
 
         public ReactiveCommand<Unit, string> SendCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddEmptyParamCommand { get; }
+        
+        public ReactiveCommand<string, Unit> RemoveParamCommand { get; }
         public RequestEnum[] RequestEnums { get; set; } = (RequestEnum[]) Enum.GetValues(typeof(RequestEnum));
 
         public RequestEnum SelectedRequestEnum
@@ -50,17 +53,20 @@ namespace NeBrowser.ViewModels
 
         public string ResponseBody => _responseBody.Value;
 
-        public ObservableCollectionExtended<Header> Headers { get; } = new ObservableCollectionExtended<Header>();
+        public ObservableCollectionExtended<Param> QueryParams { get; } = new ObservableCollectionExtended<Param>();
 
         public MainWindowViewModel()
         {
             SendCommand = ReactiveCommand.CreateFromTask(SendRequest);
+            AddEmptyParamCommand = ReactiveCommand.Create(AddEmptyParam);
+            RemoveParamCommand = ReactiveCommand.Create<string>(RemoveParam);
+            
             _responseBody = SendCommand.ToProperty(this, x => x.ResponseBody);
 
-            var updateUrl = ReactiveCommand.Create<IReadOnlyCollection<Header>>(UpdateUrl);
+            var updateUrl = ReactiveCommand.Create<IReadOnlyCollection<Param>>(UpdateUrl);
             var updateParams = ReactiveCommand.Create<string>(UpdateParams);
 
-            Headers.ToObservableChangeSet()
+            QueryParams.ToObservableChangeSet()
                 .AutoRefresh() // This magic listens to change notifications of inner objects.
                 .ToCollection()
                 .Throttle(TimeSpan.FromSeconds(1), RxApp.MainThreadScheduler)
@@ -75,21 +81,30 @@ namespace NeBrowser.ViewModels
                 .Merge(updateUrl.ThrownExceptions)
                 .Merge(updateParams.ThrownExceptions)
                 .Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
+            AddEmptyParamCommand.ThrownExceptions
+                .Merge(updateUrl.ThrownExceptions)
+                .Merge(updateParams.ThrownExceptions)
+                .Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
+            RemoveParamCommand.ThrownExceptions
+                .Merge(updateUrl.ThrownExceptions)
+                .Merge(updateParams.ThrownExceptions)
+                .Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
         }
 
         private void UpdateParams(string url)
         {
             var qObj = HttpUtility.ParseQueryString(new Uri(_url).Query);
-            Headers.Clear();
-            Headers.AddRange(qObj.AllKeys.Select(key => new Header {Key = key, Value = qObj[key]}));
+            QueryParams.Clear();
+            QueryParams.AddRange(qObj.AllKeys.Select(key => new Param {Key = key, Value = qObj[key]}));
         }
 
-        private void UpdateUrl(IReadOnlyCollection<Header> headers)
+        private void UpdateUrl(IReadOnlyCollection<Param> headers)
         {
             var url = new Uri(Url);
             Url = QueryHelpers.AddQueryString(
                 $"{url.Scheme}{Uri.SchemeDelimiter}{url.Authority}{url.AbsolutePath}",
-                headers.ToDictionary(header => header.Key, header => header.Value));
+                headers.Where(h => !string.IsNullOrEmpty(h.Key) && !string.IsNullOrEmpty(h.Value))
+                    .ToDictionary(header => header.Key, header => header.Value));
         }
 
         private async Task<string> SendRequest()
@@ -102,8 +117,6 @@ namespace NeBrowser.ViewModels
         }
 
 
-        
-
         private Task<HttpResponseMessage> Send() => _selectedRequestEnum switch
         {
             RequestEnum.GET => _client.GetAsync(_url),
@@ -111,9 +124,14 @@ namespace NeBrowser.ViewModels
             _ => null,
         };
 
-        private void AddEmptyHeader()
+        private void AddEmptyParam()
         {
-            Headers.Add(new Header());
+            QueryParams.Add(new Param());
+        }
+
+        private void RemoveParam(string key)
+        {
+            QueryParams.Remove(QueryParams.First(p => p.Key == key));
         }
     }
 }

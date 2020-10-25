@@ -1,6 +1,6 @@
 namespace NeBrowser.Models
 {
-    public class Header:KeyValuePair<string,string>
+    public class Param:KeyValuePair<string,string>
     {
         public string Key
         {
