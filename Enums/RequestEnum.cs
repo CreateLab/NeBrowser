@@ -1,4 +1,4 @@
-namespace AStalker.Enums
+namespace NeBrowser.Enums
 {
     public enum RequestEnum
     {

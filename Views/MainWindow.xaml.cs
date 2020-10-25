@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AStalker.Views
+namespace NeBrowser.Views
 {
     public class MainWindow : Window
     {

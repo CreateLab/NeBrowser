@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using AStalker.ViewModels;
-using AStalker.Views;
+using NeBrowser.ViewModels;
+using NeBrowser.Views;
 
-namespace AStalker
+namespace NeBrowser
 {
     public class App : Application
     {

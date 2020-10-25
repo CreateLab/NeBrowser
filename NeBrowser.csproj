@@ -2,7 +2,7 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>netcoreapp3.0</TargetFramework>
-        <RootNamespace>AStalker</RootNamespace>
+        <RootNamespace>NeBrowser</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
         <Folder Include="Converters" />
@@ -20,5 +20,6 @@
         <PackageReference Include="Avalonia.Desktop" Version="0.10.999-cibuild0011450-beta" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.999-cibuild0011450-beta" />
         <PackageReference Include="Material.Avalonia" Version="0.10.3" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     </ItemGroup>
 </Project>

@@ -4,9 +4,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using AStalker.ViewModels;
+using NeBrowser.ViewModels;
 
-namespace AStalker
+namespace NeBrowser
 {
     public class ViewLocator : IDataTemplate
     {

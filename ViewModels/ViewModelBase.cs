@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ReactiveUI;
 
-namespace AStalker.ViewModels
+namespace NeBrowser.ViewModels
 {
     public class ViewModelBase : ReactiveObject
     {
