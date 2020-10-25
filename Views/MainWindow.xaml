@@ -47,24 +47,52 @@
                 </Grid.RowDefinitions>
                 <TabControl>
                     <TabItem Header="Params">
-                        <ListBox Items="{Binding Headers}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock>KEY:</TextBlock>
-                                        <TextBox Grid.Column="1" Text="{Binding Key}" />
-                                        <TextBlock Grid.Column="2">VALUE:</TextBlock>
-                                        <TextBox Grid.Column="3" Text="{Binding Value}" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ListBox Items="{Binding Headers}" VirtualizationMode="None">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock>KEY:</TextBlock>
+                                            <TextBox Grid.Column="1" Text="{Binding Key}" />
+                                            <TextBlock Grid.Column="2">VALUE:</TextBlock>
+                                            <TextBox Grid.Column="3" Text="{Binding Value}" />
+                                            <Button Grid.Column="4" Margin="5, 0, 0, 0">
+                                                <Path
+                                                    Fill="{Binding $parent[Button].Foreground}"
+                                                    Width="7"
+                                                    Height="12"
+                                                    Stretch="Uniform"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Data="F1 M 50,50 L 90,50 L 90,180 L 50,180 L50,50 Z" />
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Button Grid.Row="1" Margin="5">
+                                <Path
+                                    Fill="{Binding $parent[Button].Foreground}"
+                                    Width="7"
+                                    Height="12"
+                                    Stretch="Uniform"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="F1 M 60,60 L 90,60 L 90,50 L 110,50 L 110,60 L 140,60 L 140,80
+                                    L 130,80 L 130,130 L 70,130 L 70,70 L 60,70 L 60,60 Z  " />
+                            </Button>
+                        </Grid>
                     </TabItem>
                     <TabItem Header="Headers" />
                     <TabItem Header="Body">
@@ -82,7 +110,9 @@
                     <TabControl Grid.Row="1">
                         <TabItem Header="Headers" />
                         <TabItem Header="Body">
-                            <TextBox IsReadOnly="True" Text="{Binding ResponseBody}" />
+                            <TextBox IsReadOnly="True" Text="{Binding ResponseBody}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </TabItem>
                         <TabItem Header="Cookies" />
                     </TabControl>
