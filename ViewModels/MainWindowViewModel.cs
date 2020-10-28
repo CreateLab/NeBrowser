@@ -23,10 +23,16 @@ namespace NeBrowser.ViewModels
         private RequestEnum _selectedRequestEnum = RequestEnum.GET;
         private string _url;
         private string _requestBody;
-
+        private bool _isSending;
         private readonly ObservableAsPropertyHelper<string> _responseBody;
         private readonly HttpClient _client = new HttpClient();
 
+
+        public bool IsSending
+        {
+            get => _isSending;
+            set => this.RaiseAndSetIfChanged(ref _isSending, value);
+        }
         public ReactiveCommand<Unit, string> SendCommand { get; }
         public ReactiveCommand<Unit, Unit> AddEmptyParamCommand { get; }
         
@@ -89,6 +95,7 @@ namespace NeBrowser.ViewModels
                 .Merge(updateUrl.ThrownExceptions)
                 .Merge(updateParams.ThrownExceptions)
                 .Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
+            SendCommand.IsExecuting.Subscribe(e => IsSending = e, error => Console.WriteLine($"Uh oh: {error}"));
         }
 
         private void UpdateParams(string url)
