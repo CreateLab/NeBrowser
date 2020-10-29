@@ -28,13 +28,24 @@ namespace NeBrowser.ViewModels
 		private string _requestBody;
 		private bool _isSending;
 		private readonly ObservableAsPropertyHelper<string> _responseBody;
-		private Brush _resultBrush;
 		private int? _statusCode;
+		private bool _isSucceedRequest;
+
+		public bool IsSuceedRequest
+		{
+			get => _isSucceedRequest;
+			set => this.RaiseAndSetIfChanged(ref  _isSucceedRequest , value);
+		}
 
 		public int? StatusCode
 		{
 			get => _statusCode;
-			set => this.RaiseAndSetIfChanged(ref _statusCode, value);
+			set
+			{
+				this.RaiseAndSetIfChanged(ref _statusCode, value);
+				if (value != null)
+					IsSuceedRequest = true;
+			}
 		}
 
 		public bool IsSending
@@ -48,12 +59,7 @@ namespace NeBrowser.ViewModels
 			get => _selectedRequestEnum;
 			set => this.RaiseAndSetIfChanged(ref _selectedRequestEnum, value);
 		}
-
-		public Brush ResultBrush
-		{
-			get => _resultBrush;
-			set =>this.RaiseAndSetIfChanged(ref _resultBrush, value);
-		}
+		
 
 		public ReactiveCommand<Unit, string> SendCommand { get; }
 		public ReactiveCommand<Unit, Unit> AddEmptyParamCommand { get; }
@@ -162,7 +168,6 @@ namespace NeBrowser.ViewModels
 		{
 			var res = await Send();
 			StatusCode = res.StatusCode;
-			//ResultBrush = 0.GetStatusCodeColor();
 			ResponseHeadersParams.Clear();
 			ResponseHeadersParams.AddRange(res.Headers.Select(h => new Param
 			{
