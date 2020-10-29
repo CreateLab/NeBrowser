@@ -1,7 +1,9 @@
 namespace NeBrowser.Models
 {
-    public class Param:KeyValuePair<string,string>
+    public class Param:StateParam
     {
+        
+
         public string Key
         {
             get => Item1;

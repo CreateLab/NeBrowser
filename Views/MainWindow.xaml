@@ -56,8 +56,10 @@
                 <!--Request Type-->
                 <ComboBox Items="{Binding RequestEnums}"
                           SelectedItem="{Binding SelectedRequestEnum}" />
-                <TextBox Grid.Column="1" Watermark="Enter request URL" Text="{Binding Url}" />
-                <Button Grid.Column="2" Margin="5, 0, 0, 0" Content="Send" Command="{Binding SendCommand}" />
+                <TextBox Grid.Column="1" Watermark="Enter request URL"
+                         Text="{Binding Url}" />
+                <Button Grid.Column="2" Margin="5, 0, 0, 0" Content="Send"
+                        Command="{Binding SendCommand}" />
             </Grid>
         </styles:Card>
         <!--Body-->
@@ -88,10 +90,13 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock>KEY:</TextBlock>
-                                            <TextBox Grid.Column="1" Text="{Binding Key}" Name="Key" />
+                                            <TextBox Grid.Column="1"
+                                                Text="{Binding Key}" Name="Key" />
                                             <TextBlock Grid.Column="2">VALUE:</TextBlock>
-                                            <TextBox Grid.Column="3" Text="{Binding Value}" />
-                                            <Button Grid.Column="4" Margin="5, 0, 0, 0"
+                                            <TextBox Grid.Column="3"
+                                                Text="{Binding Value}" />
+                                            <Button Grid.Column="4"
+                                                    Margin="5, 0, 0, 0"
                                                     Command="{Binding $parent[Window].DataContext.RemoveParamCommand }"
                                                     CommandParameter="{Binding #Key.Text}">
                                                 <Path
@@ -109,14 +114,64 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
 
-                            <Button Grid.Row="1" Margin="5,10, 5, 5" Command="{Binding AddEmptyParamCommand}">
+                            <Button Grid.Row="1" Margin="5,10, 5, 5"
+                                    Command="{Binding AddEmptyParamCommand}">
                                 Add Empty Param
                             </Button>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Headers" />
+                    <TabItem Header="Headers">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ListBox Items="{Binding ResponseHeaderParams}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Margin="0, 0, 5 ,0"
+                                                IsChecked="{Binding IsUseful}" />
+                                            <TextBlock Grid.Column="1">KEY:</TextBlock>
+                                            <TextBox Grid.Column="2"
+                                                Text="{Binding Key}" Name="Key" />
+                                            <TextBlock Grid.Column="3">VALUE:</TextBlock>
+                                            <TextBox Grid.Column="4"
+                                                Text="{Binding Value}" />
+                                            <Button Grid.Column="5"
+                                                    Margin="5, 0, 0, 0"
+                                                    Command="{Binding $parent[Window].DataContext.RemoveParamCommand }"
+                                                    CommandParameter="{Binding #Key.Text}">
+                                                <Path
+                                                    Fill="{Binding $parent[Button].Foreground}"
+                                                    Width="12"
+                                                    Height="15"
+                                                    Stretch="Uniform"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Data="F1 M 60,60 L 130,60 L 130,10 L 190,10 L 190,60 L 260,60 L 260,130
+                                                            L 230,130 L 230,260 L 90,260 L 90,130 L 60,130 L 60,60 Z  " />
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Button Grid.Row="1" Margin="5,10, 5, 5"
+                                    Command="{Binding AddEmptyHeaderCommand}">
+                                Add Empty Header
+                            </Button>
+                        </Grid>
+                    </TabItem>
                     <TabItem Header="Body">
-                        <TextBox Text="{Binding AddEmptyParamCommand}" />
+                        <TextBox Text="{Binding RequestBody}" />
                     </TabItem>
                     <TabItem Header="Cookies" />
                 </TabControl>
@@ -130,19 +185,22 @@
                     <TabControl Grid.Row="1">
                         <TabItem Header="Headers" />
                         <TabItem Header="Body">
-                            <TextBox IsReadOnly="True" Text="{Binding ResponseBody}"
+                            <TextBox IsReadOnly="True"
+                                     Text="{Binding ResponseBody}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </TabItem>
                         <TabItem Header="Cookies" />
                     </TabControl>
                 </Grid>
-                <Grid Grid.Row="2" Background="White" Opacity="0.85" IsVisible="{Binding IsSending}">
+                <Grid Grid.Row="2" Background="White" Opacity="0.85"
+                      IsVisible="{Binding IsSending}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <ProgressBar IsIndeterminate="True" Grid.Row="0" Margin="0,5,0,0"/>
+                    <ProgressBar IsIndeterminate="True" Grid.Row="0"
+                                 Margin="0,5,0,0" />
                     <Button Grid.Row="1" Height="30" Width="80">Cancel</Button>
                 </Grid>
             </Grid>

@@ -18,6 +18,8 @@
         <PackageReference Include="Avalonia" Version="0.10.999-cibuild0011450-beta" />
         <PackageReference Include="Avalonia.Desktop" Version="0.10.999-cibuild0011450-beta" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.999-cibuild0011450-beta" />
+        <PackageReference Include="Flurl" Version="3.0.0-pre6" />
+        <PackageReference Include="Flurl.Http" Version="3.0.0-pre6" />
         <PackageReference Include="Material.Avalonia" Version="0.10.3" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     </ItemGroup>

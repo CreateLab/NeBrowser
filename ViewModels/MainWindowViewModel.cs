@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Web;
 using DynamicData;
 using DynamicData.Binding;
+using Flurl;
+using Flurl.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using NeBrowser.Enums;
 using NeBrowser.Extensions;
@@ -25,7 +27,6 @@ namespace NeBrowser.ViewModels
         private string _requestBody;
         private bool _isSending;
         private readonly ObservableAsPropertyHelper<string> _responseBody;
-        private readonly HttpClient _client = new HttpClient();
 
 
         public bool IsSending
@@ -35,8 +36,9 @@ namespace NeBrowser.ViewModels
         }
         public ReactiveCommand<Unit, string> SendCommand { get; }
         public ReactiveCommand<Unit, Unit> AddEmptyParamCommand { get; }
-        
+        public ReactiveCommand<Unit, Unit> AddEmptyHeaderCommand { get; }
         public ReactiveCommand<string, Unit> RemoveParamCommand { get; }
+        public ReactiveCommand<string, Unit> RemoveHeaderCommand { get; }
         public RequestEnum[] RequestEnums { get; set; } = (RequestEnum[]) Enum.GetValues(typeof(RequestEnum));
 
         public RequestEnum SelectedRequestEnum
@@ -60,13 +62,14 @@ namespace NeBrowser.ViewModels
         public string ResponseBody => _responseBody.Value;
 
         public ObservableCollectionExtended<Param> QueryParams { get; } = new ObservableCollectionExtended<Param>();
-
+        public ObservableCollectionExtended<Param> ResponseHeadersParams { get; } = new ObservableCollectionExtended<Param>();
         public MainWindowViewModel()
         {
             SendCommand = ReactiveCommand.CreateFromTask(SendRequest);
-            AddEmptyParamCommand = ReactiveCommand.Create(AddEmptyParam);
-            RemoveParamCommand = ReactiveCommand.Create<string>(RemoveParam);
-            
+            AddEmptyParamCommand = ReactiveCommand.Create(() => AddEmptyParam(QueryParams));
+            RemoveParamCommand = ReactiveCommand.Create<string>(s => RemoveParam(s,QueryParams));
+            RemoveHeaderCommand = ReactiveCommand.Create<string>(s => RemoveParam(s,ResponseHeadersParams));
+            AddEmptyHeaderCommand = ReactiveCommand.Create(() => AddEmptyParam(ResponseHeadersParams));
             _responseBody = SendCommand.ToProperty(this, x => x.ResponseBody);
 
             var updateUrl = ReactiveCommand.Create<IReadOnlyCollection<Param>>(UpdateUrl);
@@ -117,28 +120,38 @@ namespace NeBrowser.ViewModels
         private async Task<string> SendRequest()
         {
             var res = await Send();
-            var data = (await res.Content.ReadAsStringAsync()).EmptyIfNull();
+            var data = (await res.GetStringAsync()).EmptyIfNull();
             if (BeautifyHelper.TryBeautifyJson(ref data)) return data;
             BeautifyHelper.TryBeautifyXml(ref data);
             return data;
         }
 
-
-        private Task<HttpResponseMessage> Send() => _selectedRequestEnum switch
+        private  async Task<IFlurlResponse> Send()
         {
-            RequestEnum.GET => _client.GetAsync(_url),
-            RequestEnum.POST => _client.PostAsync(_url, new ByteArrayContent(Encoding.UTF8.GetBytes(_requestBody))),
-            _ => null,
-        };
+            var method = SelectedRequestEnum switch
+            {
+                RequestEnum.GET => HttpMethod.Get,
+                RequestEnum.POST => HttpMethod.Post,
+                _ => null,
+            };
+            var url = new Url(_url);
+            foreach (var header in ResponseHeadersParams.Where(h=>h.IsUseful))
+            {
+                url.WithHeader(header.Key, header.Value);
+            }
 
-        private void AddEmptyParam()
-        {
-            QueryParams.Add(new Param());
+            return await url.SendAsync(method);
         }
 
-        private void RemoveParam(string key)
+        private void AddEmptyParam(ICollection<Param> @params)
         {
-            QueryParams.Remove(QueryParams.First(p => p.Key == key));
+            @params.Add(new Param());
         }
+
+        private void RemoveParam(string key, ICollection<Param> @params)
+        {
+            @params.Remove(@params.First(p => p.Key == key));
+        }
+
     }
 }
