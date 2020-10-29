@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Avalonia.Media;
 using DynamicData;
 using DynamicData.Binding;
 using Flurl;
@@ -27,12 +28,31 @@ namespace NeBrowser.ViewModels
 		private string _requestBody;
 		private bool _isSending;
 		private readonly ObservableAsPropertyHelper<string> _responseBody;
+		private Brush _resultBrush;
+		private int? _statusCode;
 
+		public int? StatusCode
+		{
+			get => _statusCode;
+			set => this.RaiseAndSetIfChanged(ref _statusCode, value);
+		}
 
 		public bool IsSending
 		{
 			get => _isSending;
 			set => this.RaiseAndSetIfChanged(ref _isSending, value);
+		}
+
+		public RequestEnum SelectedRequestEnum
+		{
+			get => _selectedRequestEnum;
+			set => this.RaiseAndSetIfChanged(ref _selectedRequestEnum, value);
+		}
+
+		public Brush ResultBrush
+		{
+			get => _resultBrush;
+			set =>this.RaiseAndSetIfChanged(ref _resultBrush, value);
 		}
 
 		public ReactiveCommand<Unit, string> SendCommand { get; }
@@ -44,11 +64,7 @@ namespace NeBrowser.ViewModels
 		public RequestEnum[] RequestEnums { get; set; } =
 			(RequestEnum[]) Enum.GetValues(typeof(RequestEnum));
 
-		public RequestEnum SelectedRequestEnum
-		{
-			get => _selectedRequestEnum;
-			set => this.RaiseAndSetIfChanged(ref _selectedRequestEnum, value);
-		}
+		
 
 		public string Url
 		{
@@ -145,6 +161,8 @@ namespace NeBrowser.ViewModels
 		private async Task<string> SendRequest()
 		{
 			var res = await Send();
+			StatusCode = res.StatusCode;
+			//ResultBrush = 0.GetStatusCodeColor();
 			ResponseHeadersParams.Clear();
 			ResponseHeadersParams.AddRange(res.Headers.Select(h => new Param
 			{

@@ -181,7 +181,10 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Margin="5" />
+                    <StackPanel Margin="5">
+                        <TextBlock>Status Code:</TextBlock>
+                        <TextBlock Text="{Binding StatusCode}"></TextBlock>
+                    </StackPanel>
                     <TabControl Grid.Row="1">
                         <TabItem Header="Headers">
                              <ListBox Items="{Binding ResponseHeadersParams}">
