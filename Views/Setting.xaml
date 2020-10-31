@@ -9,11 +9,11 @@
         x:Class="NeBrowser.Views.Setting"
         Icon="/Assets/avalonia-logo.ico"
         Title="Setting">
-    
+
     <Window.Styles>
-       
+
     </Window.Styles>
     <Grid>
-       
+        <CheckBox IsChecked="{Binding Theme}" />
     </Grid>
 </Window>
