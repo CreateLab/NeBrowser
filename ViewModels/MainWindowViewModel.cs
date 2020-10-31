@@ -25,6 +25,7 @@ namespace NeBrowser.ViewModels
 {
 	public class MainWindowViewModel : ViewModelBase
 	{
+		private MainWindow _mainWindow;
 		private RequestEnum _selectedRequestEnum = RequestEnum.GET;
 		private string _url;
 		private string _requestBody;
@@ -100,8 +101,9 @@ namespace NeBrowser.ViewModels
 			get;
 		} = new ObservableCollectionExtended<Param>();
 
-		public MainWindowViewModel()
+		public MainWindowViewModel(MainWindow window, Setting setting, SettingWindowViewModel viewModel)
 		{
+			_mainWindow = window;
 			SendCommand = ReactiveCommand.CreateFromTask(SendRequest);
 			AddEmptyParamCommand =
 				ReactiveCommand.Create(() => AddEmptyParam(QueryParams));
@@ -187,8 +189,8 @@ namespace NeBrowser.ViewModels
 
 		private async Task ShowSetting()
 		{
-			//TODO: set main window;
-			await new Setting().ShowDialog(new Window());
+			
+			await new Setting().ShowDialog(_mainWindow);
 		}
 
 		private async Task<IFlurlResponse> Send()

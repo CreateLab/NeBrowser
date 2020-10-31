@@ -2,6 +2,9 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
+using Microsoft.Extensions.DependencyInjection;
+using NeBrowser.ViewModels;
+using NeBrowser.Views;
 
 namespace NeBrowser
 {
@@ -10,8 +13,21 @@ namespace NeBrowser
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
-        public static void Main(string[] args) => BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        public static ServiceCollection ServiceCollection = new ServiceCollection();
+        public static void Main(string[] args)
+        {
+            InitCollection();
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+
+        private static void InitCollection()
+        {
+            ServiceCollection.AddSingleton<MainWindow, MainWindow>();
+            ServiceCollection.AddSingleton<Setting, Setting>();
+            ServiceCollection.AddSingleton<MainWindowViewModel, MainWindowViewModel>();
+            ServiceCollection.AddSingleton<SettingWindowViewModel, SettingWindowViewModel>();
+        }
 
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()

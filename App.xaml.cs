@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using NeBrowser.ViewModels;
 using NeBrowser.Views;
 
@@ -17,10 +18,9 @@ namespace NeBrowser
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
+                var sp = Program.ServiceCollection.BuildServiceProvider();
+                desktop.MainWindow = sp.GetService<MainWindow>();
+                desktop.MainWindow.DataContext = sp.GetServices<MainWindowViewModel>();
             }
 
             base.OnFrameworkInitializationCompleted();
