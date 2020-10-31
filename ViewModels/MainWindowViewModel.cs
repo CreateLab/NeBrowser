@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Avalonia.Controls;
 using Avalonia.Media;
 using DynamicData;
 using DynamicData.Binding;
@@ -17,6 +18,7 @@ using NeBrowser.Enums;
 using NeBrowser.Extensions;
 using NeBrowser.Helpers;
 using NeBrowser.Models;
+using NeBrowser.Views;
 using ReactiveUI;
 
 namespace NeBrowser.ViewModels
@@ -66,6 +68,7 @@ namespace NeBrowser.ViewModels
 		public ReactiveCommand<Unit, Unit> AddEmptyHeaderCommand { get; }
 		public ReactiveCommand<string, Unit> RemoveParamCommand { get; }
 		public ReactiveCommand<string, Unit> RemoveHeaderCommand { get; }
+		public ReactiveCommand<Unit, Unit> ShowSettingCommand { get; }
 
 		public RequestEnum[] RequestEnums { get; set; } =
 			(RequestEnum[]) Enum.GetValues(typeof(RequestEnum));
@@ -111,6 +114,8 @@ namespace NeBrowser.ViewModels
 			AddEmptyHeaderCommand =
 				ReactiveCommand.Create(
 					() => AddEmptyParam(RequestHeadersParams));
+			ShowSettingCommand = ReactiveCommand.CreateFromTask(ShowSetting);
+			
 			_responseBody = SendCommand.ToProperty(this, x => x.ResponseBody);
 
 			var updateUrl =
@@ -178,6 +183,12 @@ namespace NeBrowser.ViewModels
 			if (BeautifyHelper.TryBeautifyJson(ref data)) return data;
 			BeautifyHelper.TryBeautifyXml(ref data);
 			return data;
+		}
+
+		private async Task ShowSetting()
+		{
+			//TODO: set main window;
+			await new Setting().ShowDialog(new Window());
 		}
 
 		private async Task<IFlurlResponse> Send()
