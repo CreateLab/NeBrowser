@@ -18,9 +18,9 @@ namespace NeBrowser
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var sp = Program.ServiceCollection.BuildServiceProvider();
-                desktop.MainWindow = sp.GetService<MainWindow>();
-                desktop.MainWindow.DataContext = sp.GetService<MainWindowViewModel>();
+                Program.ServiceProvider.GetService<Setting>().DataContext = Program.ServiceProvider.GetService<SettingWindowViewModel>();
+                desktop.MainWindow = Program.ServiceProvider.GetService<MainWindow>();
+                desktop.MainWindow.DataContext = Program.ServiceProvider.GetService<MainWindowViewModel>();
             }
 
             base.OnFrameworkInitializationCompleted();

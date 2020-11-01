@@ -7,10 +7,9 @@ namespace NeBrowser.Views
 {
     public class Setting : Window
     {
-        public Setting(SettingWindowViewModel viewModel)
+        public Setting()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
 
         private void InitializeComponent()

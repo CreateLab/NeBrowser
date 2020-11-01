@@ -14,10 +14,12 @@ namespace NeBrowser
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
-        public static ServiceCollection ServiceCollection = new ServiceCollection();
+        public static readonly ServiceCollection ServiceCollection = new ServiceCollection();
+        public static  ServiceProvider ServiceProvider;
         public static void Main(string[] args)
         {
             InitCollection();
+            ServiceProvider = ServiceCollection.BuildServiceProvider();
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
         }
@@ -25,7 +27,7 @@ namespace NeBrowser
         private static void InitCollection()
         {
             ServiceCollection.AddSingleton<MainWindow, MainWindow>();
-            ServiceCollection.AddSingleton<Setting, Setting>();
+            ServiceCollection.AddTransient<Setting, Setting>();
             ServiceCollection.AddSingleton<MainWindowViewModel, MainWindowViewModel>();
             ServiceCollection.AddSingleton<SettingWindowViewModel, SettingWindowViewModel>();
             ServiceCollection.AddSingleton<PaletteHelper, PaletteHelper>();

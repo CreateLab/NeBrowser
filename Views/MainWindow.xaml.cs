@@ -7,10 +7,9 @@ namespace NeBrowser.Views
 {
     public class MainWindow : Window
     {
-        public MainWindow(MainWindowViewModel model)
+        public MainWindow()
         {
             InitializeComponent();
-            DataContext = model;
         }
 
         private void InitializeComponent()

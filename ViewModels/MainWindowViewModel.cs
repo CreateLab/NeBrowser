@@ -14,6 +14,7 @@ using DynamicData.Binding;
 using Flurl;
 using Flurl.Http;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.DependencyInjection;
 using NeBrowser.Enums;
 using NeBrowser.Extensions;
 using NeBrowser.Helpers;
@@ -101,9 +102,10 @@ namespace NeBrowser.ViewModels
 			get;
 		} = new ObservableCollectionExtended<Param>();
 
-		public MainWindowViewModel(/*MainWindow window, Setting setting, SettingWindowViewModel viewModel*/)
+		public MainWindowViewModel(MainWindow window)
 		{
-			//_mainWindow = window;
+			_mainWindow = window;
+
 			SendCommand = ReactiveCommand.CreateFromTask(SendRequest);
 			AddEmptyParamCommand =
 				ReactiveCommand.Create(() => AddEmptyParam(QueryParams));
@@ -149,6 +151,9 @@ namespace NeBrowser.ViewModels
 				.Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
 			SendCommand.IsExecuting.Subscribe(e => IsSending = e,
 				error => Console.WriteLine($"Uh oh: {error}"));
+			ShowSettingCommand.ThrownExceptions.Merge(updateUrl.ThrownExceptions)
+				.Merge(updateParams.ThrownExceptions)
+				.Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
 		}
 
 		private void UpdateParams(string url)
@@ -189,8 +194,9 @@ namespace NeBrowser.ViewModels
 
 		private async Task ShowSetting()
 		{
-			
-			await new Setting().ShowDialog(_mainWindow);
+			var s = Program.ServiceProvider.GetService<Setting>();
+			s.DataContext = Program.ServiceProvider.GetService<SettingWindowViewModel>();
+			await s.ShowDialog(_mainWindow);
 		}
 
 		private async Task<IFlurlResponse> Send()
