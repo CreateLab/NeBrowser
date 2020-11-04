@@ -28,11 +28,7 @@ namespace NeBrowser.Controls
 
 		public static readonly DirectProperty<BindableTextEditor,string> TextProperty =
 			AvaloniaProperty.RegisterDirect<BindableTextEditor, string>("BindingText",
-				editor =>
-				{
-					
-					return editor.BindingText;
-				},
+				editor => editor.BindingText,
 				(editor, s) => editor.BindingText = s,
 				default(string),BindingMode.TwoWay);
 		
