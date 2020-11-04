@@ -2,7 +2,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
-using Material.Styles.Themes;
 using Microsoft.Extensions.DependencyInjection;
 using NeBrowser.ViewModels;
 using NeBrowser.Views;
@@ -30,7 +29,7 @@ namespace NeBrowser
             ServiceCollection.AddTransient<Setting, Setting>();
             ServiceCollection.AddSingleton<MainWindowViewModel, MainWindowViewModel>();
             ServiceCollection.AddSingleton<SettingWindowViewModel, SettingWindowViewModel>();
-            ServiceCollection.AddSingleton<PaletteHelper, PaletteHelper>();
+            //ServiceCollection.AddSingleton<PaletteHelper, PaletteHelper>();
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.

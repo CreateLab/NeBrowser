@@ -10,7 +10,7 @@
         x:Class="NeBrowser.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title=" NeBrowser">
-    
+
     <Window.Styles>
         <Style Selector="ListBoxItem">
             <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
@@ -197,8 +197,8 @@
                         <TabItem Header="Body">
                             <controls:BindableTextEditor IsReadOnly="True"
                                 BindingText="{Binding ResponseBody}"
-                                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                                ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </TabItem>
                         <TabItem Header="Cookies" />
                     </TabControl>

@@ -1,5 +1,4 @@
 ﻿using Avalonia.Media;
-using Material.Colors;
 
 namespace NeBrowser.Extensions
 {
