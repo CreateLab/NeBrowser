@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Xml;
 using System.Xml.Linq;
@@ -10,7 +11,8 @@ namespace NeBrowser.Helpers
         {
             var options = new JsonSerializerOptions()
             {
-                WriteIndented = true
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
             JsonElement jsonElement;
