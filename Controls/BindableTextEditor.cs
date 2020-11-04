@@ -22,7 +22,7 @@ namespace NeBrowser.Controls
 		/// The bindable text property dependency property
 		/// </summary>
 
-		public static readonly AvaloniaProperty<string> TextProperty =
+		public static readonly DirectProperty<BindableTextEditor,string> TextProperty =
 			AvaloniaProperty.RegisterDirect<BindableTextEditor, string>("BindingText",
 				editor => editor.Text,
 				(editor, s) => editor.Text = s,
