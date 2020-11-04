@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
         xmlns:viewModels="clr-namespace:NeBrowser.ViewModels"
+        xmlns:controls="clr-namespace:NeBrowser.Controls"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NeBrowser.Views.MainWindow"
@@ -194,10 +195,10 @@
                             </ListBox>
                         </TabItem>
                         <TabItem Header="Body">
-                            <TextBox IsReadOnly="True"
-                                     Text="{Binding ResponseBody}"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                            <controls:BindableTextEditor IsReadOnly="True"
+                                BindingText="{Binding ResponseBody}"
+                                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </TabItem>
                         <TabItem Header="Cookies" />
                     </TabControl>
