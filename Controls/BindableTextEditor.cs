@@ -14,8 +14,8 @@ namespace NeBrowser.Controls
 		/// </summary>
 		public new string BindingText
 		{
-			get { return (string) this.GetValue(TextProperty); }
-			set { this.SetValue(TextProperty, value); }
+			get => GetValue(TextProperty);
+			set => SetValue(TextProperty, value);
 		}
 
 		/// <summary>
