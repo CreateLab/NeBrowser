@@ -15,7 +15,11 @@ namespace NeBrowser.Controls
 		public new string BindingText
 		{
 			get => GetValue(TextProperty);
-			set => SetValue(TextProperty, value);
+			set
+			{
+				Text = value;
+				SetValue(TextProperty, value);
+			}
 		}
 
 		/// <summary>
@@ -24,8 +28,12 @@ namespace NeBrowser.Controls
 
 		public static readonly DirectProperty<BindableTextEditor,string> TextProperty =
 			AvaloniaProperty.RegisterDirect<BindableTextEditor, string>("BindingText",
-				editor => editor.Text,
-				(editor, s) => editor.Text = s,
+				editor =>
+				{
+					
+					return editor.BindingText;
+				},
+				(editor, s) => editor.BindingText = s,
 				default(string),BindingMode.TwoWay);
 		
 	
