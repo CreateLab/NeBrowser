@@ -19,7 +19,11 @@ namespace NeBrowser.Controls
 			get => _text;
 			set
 			{
-				Text = value;
+				if (value != null)
+				{
+					TextArea.Document.Text = value;
+				}
+					
 				SetAndRaise(BindingTextProperty, ref _text, value);
 			}
 		}
