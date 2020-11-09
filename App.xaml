@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:NeBrowser"
+             xmlns:cc="clr-namespace:NeBrowser.Controls"
              xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
              x:Class="NeBrowser.App">
     <Application.DataTemplates>
@@ -8,11 +9,26 @@
     </Application.DataTemplates>
 
     <Application.Resources>
-        <themes:BundledTheme BaseTheme="Light" PrimaryColor="DeepOrange" SecondaryColor="Amber"/>
+        <themes:BundledTheme BaseTheme="Dark" PrimaryColor="DeepOrange" SecondaryColor="Amber"/>
     </Application.Resources>
     <Application.Styles>
-        <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
-        <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseDark.xaml"/>
         <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
+        <StyleInclude Source="avares://Material.Avalonia/Material.Avalonia.Templates.xaml" />
+            <Style Selector="cc|BindableTextEditor">
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer Focusable="False"
+                                          Name="PART_ScrollViewer"
+                                          VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
+                                          HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
+                                          VerticalContentAlignment="Top"
+                                          HorizontalContentAlignment="Left"
+                                          Padding="{TemplateBinding Padding}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter>
+            </Style>
     </Application.Styles>
 </Application>

@@ -46,8 +46,8 @@
             </MenuItem>
         </Menu>
         <!--Send row-->
-        <!-- <styles:Card Grid.Row="1" Margin="5"> -->
-            <Grid Margin="5" ColumnDefinitions="Auto, *, Auto" Grid.Row="1">
+        <styles:Card Grid.Row="1" Margin="5">
+            <Grid Margin="5" ColumnDefinitions="Auto, *, Auto">
                 <!--Request Type-->
                 <ComboBox Items="{Binding RequestEnums}"
                           SelectedItem="{Binding SelectedRequestEnum}" />
@@ -56,10 +56,10 @@
                 <Button Grid.Column="2" Margin="5, 0, 0, 0" Content="Send"
                         Command="{Binding SendCommand}" />
             </Grid>
-        <!-- </styles:Card> -->
+        </styles:Card>
         <!--Body-->
-        <!-- <styles:Card Grid.Row="2" Margin="5"> -->
-            <Grid Margin="5" RowDefinitions="*, Auto, *" Grid.Row="2" >
+        <styles:Card Grid.Row="2" Margin="5">
+            <Grid Margin="5" RowDefinitions="*, Auto, *">
                 <TabControl>
                     <TabItem Header="Params">
                         <Grid>
@@ -214,7 +214,7 @@
                     <Button Grid.Row="1" Height="30" Width="80">Cancel</Button>
                 </Grid>
             </Grid>
-        <!-- </styles:Card> -->
+        </styles:Card>
     </Grid>
 
 </Window>
