@@ -12,6 +12,9 @@
         Title=" NeBrowser">
 
     <Window.Styles>
+        <Style Selector="RadioButton">
+            <Setter Property="Margin" Value="5, 0, 0, 0" />
+        </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
             <Setter Property="Background" Value="Transparent" />
@@ -59,7 +62,7 @@
         </styles:Card>
         <!--Body-->
         <styles:Card Grid.Row="2" Margin="5">
-            <Grid Margin="5" RowDefinitions="*, Auto, *">
+            <Grid Margin="5" ColumnDefinitions="*, Auto, *">
                 <TabControl>
                     <TabItem Header="Params">
                         <Grid>
@@ -161,8 +164,8 @@
                     </TabItem>
                     <TabItem Header="Cookies" />
                 </TabControl>
-                <GridSplitter Grid.Row="1" Height="3" />
-                <Grid Grid.Row="2" RowDefinitions="Auto, *">
+                <GridSplitter Grid.Column="1" Width="3" Margin="5, 0, 5, 0" />
+                <Grid Grid.Column="2" RowDefinitions="Auto, *">
                     <StackPanel Margin="5" HorizontalAlignment="Right"
                                 Orientation="Horizontal"
                                 IsVisible="{Binding IsSuceedRequest}">
@@ -195,10 +198,37 @@
                             </ListBox>
                         </TabItem>
                         <TabItem Header="Body">
-                            <controls:BindableTextEditor IsReadOnly="True"
-                                BindingText="{Binding ResponseBody}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                            <Grid RowDefinitions="auto, *">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Row="1"
+                                                Orientation="Horizontal"
+                                                Margin="5">
+                                        <RadioButton GroupName="ResponseType"
+                                            IsChecked="True">
+                                            Text
+                                        </RadioButton>
+                                        <RadioButton GroupName="ResponseType">
+                                            Json
+                                        </RadioButton>
+                                        <RadioButton GroupName="ResponseType">
+                                            Xml
+                                        </RadioButton>
+                                        <RadioButton GroupName="ResponseType">
+                                            RowContent
+                                        </RadioButton>
+                                    </StackPanel>
+                                    <Button Margin="5" Grid.Column="2">
+                                        Save Response
+                                    </Button>
+                                </Grid>
+                                <controls:BindableTextEditor
+                                    Grid.Row="2"
+                                    IsReadOnly="True"
+                                    ShowLineNumbers="True"
+                                    BindingText="{Binding ResponseBody}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                            </Grid>
                         </TabItem>
                         <TabItem Header="Cookies" />
                     </TabControl>
@@ -211,7 +241,10 @@
 
                     <ProgressBar IsIndeterminate="True" Grid.Row="0"
                                  Margin="0,5,0,0" />
-                    <Button Grid.Row="1" Height="30" Width="80">Cancel</Button>
+                    <Button Grid.Row="1" Height="30" Width="80"
+                            Command="{Binding CancelCommand}">
+                        Cancel
+                    </Button>
                 </Grid>
             </Grid>
         </styles:Card>

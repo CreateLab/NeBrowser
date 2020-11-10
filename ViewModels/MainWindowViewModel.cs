@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Avalonia.Controls;
@@ -29,16 +30,17 @@ namespace NeBrowser.ViewModels
 		private MainWindow _mainWindow;
 		private RequestEnum _selectedRequestEnum = RequestEnum.GET;
 		private string _url;
-		private string _requestBody;
+		private string _requestBodyText;
 		private bool _isSending;
 		private readonly ObservableAsPropertyHelper<string> _responseBody;
 		private int? _statusCode;
 		private bool _isSucceedRequest;
+		private CancellationTokenSource _source;
 
 		public bool IsSuceedRequest
 		{
 			get => _isSucceedRequest;
-			set => this.RaiseAndSetIfChanged(ref  _isSucceedRequest , value);
+			set => this.RaiseAndSetIfChanged(ref _isSucceedRequest, value);
 		}
 
 		public int? StatusCode
@@ -63,7 +65,7 @@ namespace NeBrowser.ViewModels
 			get => _selectedRequestEnum;
 			set => this.RaiseAndSetIfChanged(ref _selectedRequestEnum, value);
 		}
-		
+
 
 		public ReactiveCommand<Unit, string> SendCommand { get; }
 		public ReactiveCommand<Unit, Unit> AddEmptyParamCommand { get; }
@@ -71,11 +73,11 @@ namespace NeBrowser.ViewModels
 		public ReactiveCommand<string, Unit> RemoveParamCommand { get; }
 		public ReactiveCommand<string, Unit> RemoveHeaderCommand { get; }
 		public ReactiveCommand<Unit, Unit> ShowSettingCommand { get; }
+		public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
 		public RequestEnum[] RequestEnums { get; set; } =
 			(RequestEnum[]) Enum.GetValues(typeof(RequestEnum));
 
-		
 
 		public string Url
 		{
@@ -85,8 +87,8 @@ namespace NeBrowser.ViewModels
 
 		public string RequestBody
 		{
-			get => _requestBody;
-			set => this.RaiseAndSetIfChanged(ref _requestBody, value);
+			get => _requestBodyText;
+			set => this.RaiseAndSetIfChanged(ref _requestBodyText, value);
 		}
 
 		public string ResponseBody => _responseBody.Value;
@@ -119,7 +121,8 @@ namespace NeBrowser.ViewModels
 				ReactiveCommand.Create(
 					() => AddEmptyParam(RequestHeadersParams));
 			ShowSettingCommand = ReactiveCommand.CreateFromTask(ShowSetting);
-			
+			CancelCommand = ReactiveCommand.Create(() => _source.Cancel());
+
 			_responseBody = SendCommand.ToProperty(this, x => x.ResponseBody);
 
 			var updateUrl =
@@ -151,7 +154,8 @@ namespace NeBrowser.ViewModels
 				.Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
 			SendCommand.IsExecuting.Subscribe(e => IsSending = e,
 				error => Console.WriteLine($"Uh oh: {error}"));
-			ShowSettingCommand.ThrownExceptions.Merge(updateUrl.ThrownExceptions)
+			ShowSettingCommand.ThrownExceptions
+				.Merge(updateUrl.ThrownExceptions)
 				.Merge(updateParams.ThrownExceptions)
 				.Subscribe(error => Console.WriteLine($"Uh oh: {error}"));
 		}
@@ -195,7 +199,8 @@ namespace NeBrowser.ViewModels
 		private async Task ShowSetting()
 		{
 			var s = Program.ServiceProvider.GetService<Setting>();
-			s.DataContext = Program.ServiceProvider.GetService<SettingWindowViewModel>();
+			s.DataContext = Program.ServiceProvider
+				.GetService<SettingWindowViewModel>();
 			await s.ShowDialog(_mainWindow);
 		}
 
@@ -205,15 +210,26 @@ namespace NeBrowser.ViewModels
 			{
 				RequestEnum.GET => HttpMethod.Get,
 				RequestEnum.POST => HttpMethod.Post,
-				_ => null,
+				RequestEnum.PUT => HttpMethod.Put,
+				RequestEnum.OPTIONS => HttpMethod.Options,
+				RequestEnum.HEAD => HttpMethod.Head,
+				RequestEnum.PATCH => HttpMethod.Patch,
+				RequestEnum.DELETE => HttpMethod.Delete,
+				RequestEnum.TRACE => HttpMethod.Trace,
+				_ => null
 			};
+
 			var url = new Url(_url);
 			foreach (var header in RequestHeadersParams.Where(h => h.IsUseful))
 			{
 				url.WithHeader(header.Key, header.Value);
 			}
 
-			return await url.SendAsync(method);
+			_source = new CancellationTokenSource();
+			return await url.SendAsync(method,
+				string.IsNullOrEmpty(_requestBodyText)
+					? null
+					: new StringContent(_requestBodyText), _source.Token);
 		}
 
 		private void AddEmptyParam(ICollection<Param> @params)

@@ -3,6 +3,12 @@ namespace NeBrowser.Enums
     public enum RequestEnum
     {
         GET,
-        POST
+        POST,
+        PUT,
+        OPTIONS,
+        HEAD,
+        PATCH,
+        DELETE,
+        TRACE,
     }
 }
