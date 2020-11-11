@@ -9,11 +9,29 @@
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NeBrowser.Views.MainWindow"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="PreferSystemChrome"
-        ExtendClientAreaTitleBarHeightHint="-1"
+        WindowStartupLocation="CenterScreen"
         Icon="/Assets/avalonia-logo.ico"
         Title="NeBrowser">
+
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="File">
+                <NativeMenuItem.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="Open" />
+                        <NativeMenuItem Header="Recent">
+                            <NativeMenuItem.Menu>
+                                <NativeMenu />
+                            </NativeMenuItem.Menu>
+                        </NativeMenuItem>
+                        <NativeMenuItem Header="Quit"
+                                        Gesture="CTRL+Q"
+                                        Command="{Binding QuitProgramCommand}" />
+                    </NativeMenu>
+                </NativeMenuItem.Menu>
+            </NativeMenuItem>
+        </NativeMenu>
+    </NativeMenu.Menu>
 
     <Window.Styles>
         <Style Selector="RadioButton">
@@ -44,19 +62,7 @@
 
     <Grid RowDefinitions="Auto, Auto, *">
         <!--Menu-->
-        <Grid Grid.Row="0" Background="Transparent" DoubleTapped="MaximizeWindow" ColumnDefinitions="Auto, Auto, *, Auto">
-            <Image Source="/Assets/avalonia-logo.ico" Height="20" />
-            <Menu Grid.Column="1" Margin="5">
-                <MenuItem Header="File">
-                    <MenuItem Header="Setting"
-                              Command="{Binding ShowSettingCommand}" />
-                    <Separator />
-                    <MenuItem  Header="Exit" Click="CloseWindow"/>
-                </MenuItem>
-            </Menu>
-            <TextBlock Grid.Column="2" Opacity="0.7" HorizontalAlignment="Center">NeBrowser</TextBlock>
-            <views:Titlebar Grid.Column="3" />
-        </Grid>
+        <NativeMenuBar HorizontalAlignment="Left" Margin="5" />
         <!--Send row-->
         <styles:Card Grid.Row="1" Margin="5">
             <Grid Margin="5" ColumnDefinitions="Auto, *, Auto">
@@ -85,15 +91,19 @@
                                     <DataTemplate>
                                         <Grid Margin="5">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock>KEY:</TextBlock>
                                             <TextBox Grid.Column="1"
-                                                Text="{Binding Key}" Name="Key" />
+                                                Text="{Binding Key}"
+                                                Name="Key" />
                                             <TextBlock Grid.Column="2">VALUE:</TextBlock>
                                             <TextBox Grid.Column="3"
                                                 Text="{Binding Value}" />
@@ -129,18 +139,23 @@
                                     <DataTemplate>
                                         <Grid Margin="5">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <CheckBox Margin="0, 0, 5 ,0"
                                                 IsChecked="{Binding IsUseful}" />
                                             <TextBlock Grid.Column="1">KEY:</TextBlock>
                                             <TextBox Grid.Column="2"
-                                                Text="{Binding Key}" Name="Key" />
+                                                Text="{Binding Key}"
+                                                Name="Key" />
                                             <TextBlock Grid.Column="3">VALUE:</TextBlock>
                                             <TextBox Grid.Column="4"
                                                 Text="{Binding Value}" />
@@ -183,20 +198,24 @@
                     </StackPanel>
                     <TabControl Grid.Row="1">
                         <TabItem Header="Headers">
-                            <ListBox Items="{Binding ResponseHeadersParams}">
+                            <ListBox
+                                Items="{Binding ResponseHeadersParams}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="5">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition
+                                                    Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock>KEY:</TextBlock>
                                             <TextBox Grid.Column="1"
                                                 IsReadOnly="True"
-                                                Text="{Binding Key}" Name="Key" />
+                                                Text="{Binding Key}"
+                                                Name="Key" />
                                             <TextBlock Grid.Column="2">VALUE:</TextBlock>
                                             <TextBox Grid.Column="3"
                                                 IsReadOnly="True"
@@ -212,17 +231,21 @@
                                     <StackPanel Grid.Row="1"
                                                 Orientation="Horizontal"
                                                 Margin="5">
-                                        <RadioButton GroupName="ResponseType"
+                                        <RadioButton
+                                            GroupName="ResponseType"
                                             IsChecked="True">
                                             Text
                                         </RadioButton>
-                                        <RadioButton GroupName="ResponseType">
+                                        <RadioButton
+                                            GroupName="ResponseType">
                                             Json
                                         </RadioButton>
-                                        <RadioButton GroupName="ResponseType">
+                                        <RadioButton
+                                            GroupName="ResponseType">
                                             Xml
                                         </RadioButton>
-                                        <RadioButton GroupName="ResponseType">
+                                        <RadioButton
+                                            GroupName="ResponseType">
                                             RowContent
                                         </RadioButton>
                                     </StackPanel>
@@ -258,5 +281,4 @@
             </Grid>
         </styles:Card>
     </Grid>
-
 </Window>
