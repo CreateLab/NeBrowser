@@ -5,11 +5,15 @@
         xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
         xmlns:viewModels="clr-namespace:NeBrowser.ViewModels"
         xmlns:controls="clr-namespace:NeBrowser.Controls"
+        xmlns:views="clr-namespace:NeBrowser.Views"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NeBrowser.Views.MainWindow"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
         Icon="/Assets/avalonia-logo.ico"
-        Title=" NeBrowser">
+        Title="NeBrowser">
 
     <Window.Styles>
         <Style Selector="RadioButton">
@@ -40,14 +44,19 @@
 
     <Grid RowDefinitions="Auto, Auto, *">
         <!--Menu-->
-        <Menu Grid.Row="0">
-            <MenuItem Header="File">
-                <MenuItem Header="Setting"
-                          Command="{Binding ShowSettingCommand}" />
-                <Separator />
-                <MenuItem Header="Exit" />
-            </MenuItem>
-        </Menu>
+        <Grid Grid.Row="0" Background="Transparent" DoubleTapped="MaximizeWindow" ColumnDefinitions="Auto, Auto, *, Auto">
+            <Image Source="/Assets/avalonia-logo.ico" Height="20" />
+            <Menu Grid.Column="1" Margin="5">
+                <MenuItem Header="File">
+                    <MenuItem Header="Setting"
+                              Command="{Binding ShowSettingCommand}" />
+                    <Separator />
+                    <MenuItem  Header="Exit" Click="CloseWindow"/>
+                </MenuItem>
+            </Menu>
+            <TextBlock Grid.Column="2" Opacity="0.7" HorizontalAlignment="Center">NeBrowser</TextBlock>
+            <views:Titlebar Grid.Column="3" />
+        </Grid>
         <!--Send row-->
         <styles:Card Grid.Row="1" Margin="5">
             <Grid Margin="5" ColumnDefinitions="Auto, *, Auto">

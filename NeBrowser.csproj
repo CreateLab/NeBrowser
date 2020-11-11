@@ -16,6 +16,9 @@
         <Compile Update="Views\Setting.xaml.cs">
           <DependentUpon>Setting.xaml</DependentUpon>
         </Compile>
+        <Compile Update="Views\Titlebar.xaml.cs">
+          <DependentUpon>Titlebar.xaml</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.10.0-preview6" />

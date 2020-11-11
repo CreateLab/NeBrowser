@@ -16,5 +16,23 @@ namespace NeBrowser.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
+        private void MaximizeWindow(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            Window hostWindow = (Window)this.VisualRoot;
+
+            if (hostWindow.WindowState == WindowState.Normal)
+            {
+                hostWindow.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                hostWindow.WindowState = WindowState.Normal;
+            }
+        }
+        private void CloseWindow(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            Window hostWindow = (Window)this.VisualRoot;
+            hostWindow.Close();
+        }
     }
 }
