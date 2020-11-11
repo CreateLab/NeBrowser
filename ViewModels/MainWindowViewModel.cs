@@ -226,7 +226,7 @@ namespace NeBrowser.ViewModels
 			}
 
 			_source = new CancellationTokenSource();
-			return await url.SendAsync(method,
+			return await url.AllowAnyHttpStatus().SendAsync(method,
 				string.IsNullOrEmpty(_requestBodyText)
 					? null
 					: new StringContent(_requestBodyText), _source.Token);
