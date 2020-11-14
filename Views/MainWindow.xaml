@@ -189,7 +189,25 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Body">
-                        <TextBox Text="{Binding RequestBody}" />
+                        <Grid RowDefinitions="Auto,*">
+                            <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto">
+                                <TextBlock>Text</TextBlock>
+                                <ToggleSwitch Grid.Column="1"
+                                              IsChecked="{Binding IsFromFile}" />
+                                <TextBlock Grid.Column="2">File</TextBlock>
+                                <TextBox Grid.Column="3"
+                                         IsEnabled="{Binding IsFromFile}" />
+                                <Button Grid.Column="4"
+                                        IsEnabled="{Binding IsFromFile}">
+                                    Select
+                                </Button>
+                            </Grid>
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding RequestBody}"
+                                     IsEnabled="{Binding !IsFromFile}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap" />
+                        </Grid>
                     </TabItem>
                     <TabItem Header="Cookies" IsEnabled="False" />
                 </TabControl>
@@ -266,7 +284,7 @@
                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Cookies" IsEnabled="False"/>
+                        <TabItem Header="Cookies" IsEnabled="False" />
                     </TabControl>
                 </Grid>
                 <Grid Grid.Column="2"

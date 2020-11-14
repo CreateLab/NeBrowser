@@ -41,6 +41,20 @@ namespace NeBrowser.ViewModels
 		private CancellationTokenSource _source;
 		private Data _selectData = Data.Row;
 		private string _highlighting;
+		private bool _isFromFile;
+		private string _fileData;
+
+		public bool IsFromFile
+		{
+			get => _isFromFile;
+			set => this.RaiseAndSetIfChanged(ref _isFromFile, value);
+		}
+
+		public string FileData
+		{
+			get => _fileData;
+			set => this.RaiseAndSetIfChanged(ref _fileData, value);
+		}
 
 		public string Highlighting
 		{
@@ -121,6 +135,7 @@ namespace NeBrowser.ViewModels
 		public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 		public ReactiveCommand<Unit, Unit> QuitProgramCommand { get; }
 		public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }
+		public ReactiveCommand<Unit, Unit> SelectFileForBodyCommand { get; }
 		public ReactiveCommand<Unit, string> ConvertDataCommand { get; }
 
 		public RequestEnum[] RequestEnums { get; set; } =
@@ -159,6 +174,8 @@ namespace NeBrowser.ViewModels
 			_isText = true;
 			Log.Information("app start");
 			UpdateState();
+			SelectFileForBodyCommand =
+				ReactiveCommand.CreateFromTask(SelectFileForBody);
 			QuitProgramCommand =
 				ReactiveCommand.Create(() => Environment.Exit(0));
 			SaveFileCommand = ReactiveCommand.CreateFromTask(SaveFile);
@@ -263,7 +280,7 @@ namespace NeBrowser.ViewModels
 		private async Task SendRequest()
 		{
 			var res = await Send();
-			if(res is null) return;
+			if (res is null) return;
 			StatusCode = res.StatusCode;
 			ResponseHeadersParams.Clear();
 			ResponseHeadersParams.AddRange(res.Headers.Select(h => new Param
@@ -325,17 +342,26 @@ namespace NeBrowser.ViewModels
 				Console.WriteLine(e);
 				return null;
 			}
-				
+
 			foreach (var header in RequestHeadersParams.Where(h => h.IsUseful))
 			{
 				url.WithHeader(header.Key, header.Value);
 			}
 
 			_source = new CancellationTokenSource();
-			return await url.AllowAnyHttpStatus().SendAsync(method,
-				string.IsNullOrEmpty(_requestBodyText)
+			return await url.AllowAnyHttpStatus()
+				.SendAsync(method, GetData(), _source.Token);
+		}
+
+		private HttpContent GetData()
+		{
+			if (!IsFromFile)
+				return string.IsNullOrEmpty(_requestBodyText)
 					? null
-					: new StringContent(_requestBodyText), _source.Token);
+					: new StringContent(_requestBodyText);
+			if (!File.Exists(FileData))
+				throw new FileNotFoundException($@"{FileData} not found");
+			return new StreamContent(File.OpenRead(FileData));
 		}
 
 		private void AddEmptyParam(ICollection<Param> @params)
@@ -361,20 +387,32 @@ namespace NeBrowser.ViewModels
 		private string ConvertData()
 		{
 			var s = new string(_data);
-			if (IsXml && BeautifyHelper.TryBeautifyXml(ref s))
+			if (IsXml)
 			{
+				BeautifyHelper.TryBeautifyXml(ref s);
 				Highlighting = "XML";
 				return s;
 			}
 
-			if (IsJson && BeautifyHelper.TryBeautifyJson(ref s))
+			if (IsJson)
 			{
+				BeautifyHelper.TryBeautifyJson(ref s);
 				Highlighting = "JavaScript";
 				return s;
 			}
 
 			Highlighting = "Text";
-			return IsText ? s : "invalid format set text to data";
+			return s;
+		}
+
+		private async Task SelectFileForBody()
+		{
+			var dialog = new OpenFileDialog();
+			var result = await dialog.ShowAsync(_mainWindow);
+			if (result != null)
+			{
+				FileData = result.FirstOrDefault().EmptyIfNull();
+			}
 		}
 	}
 }
