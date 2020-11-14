@@ -13,9 +13,9 @@
         WindowStartupLocation="CenterScreen"
         Icon="/Assets/avalonia-logo.ico"
         Title="NeBrowser">
-    
+
     <Window.Resources>
-        <converter:HighlightingDefinitionConverter x:Key="HighlightingConverter"/>
+        <converter:HighlightingDefinitionConverter x:Key="HighlightingConverter" />
     </Window.Resources>
     <NativeMenu.Menu>
         <NativeMenu>
@@ -75,7 +75,7 @@
                           SelectedItem="{Binding SelectedRequestEnum}" />
                 <TextBox Grid.Column="1" Watermark="Enter request URL"
                          Text="{Binding Url}" />
-                <Button Grid.Column="2" Margin="5, 0, 0, 0" Content="Send"
+                <Button Grid.Column="2" Margin="5, 0, 5, 0" Content="Send"
                         Command="{Binding SendCommand}" />
             </Grid>
         </styles:Card>
@@ -106,11 +106,11 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock>KEY:</TextBlock>
                                             <TextBox Grid.Column="1"
-                                                Text="{Binding Key}"
-                                                Name="Key" />
+                                                     Text="{Binding Key}"
+                                                     Name="Key" />
                                             <TextBlock Grid.Column="2">VALUE:</TextBlock>
                                             <TextBox Grid.Column="3"
-                                                Text="{Binding Value}" />
+                                                     Text="{Binding Value}" />
                                             <Button Grid.Column="4"
                                                     Margin="5, 0, 0, 0"
                                                     Command="{Binding $parent[Window].DataContext.RemoveParamCommand }"
@@ -155,17 +155,17 @@
                                                     Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <CheckBox Margin="0, 0, 5 ,0"
-                                                IsChecked="{Binding IsUseful}" />
+                                                      IsChecked="{Binding IsUseful}" />
                                             <TextBlock Grid.Column="1">KEY:</TextBlock>
                                             <TextBox Grid.Column="2"
-                                                Text="{Binding Key}"
-                                                Name="Key" />
+                                                     Text="{Binding Key}"
+                                                     Name="Key" />
                                             <TextBlock Grid.Column="3">VALUE:</TextBlock>
                                             <TextBox Grid.Column="4"
-                                                Text="{Binding Value}" />
+                                                     Text="{Binding Value}" />
                                             <Button Grid.Column="5"
                                                     Margin="5, 0, 0, 0"
-                                                    Command="{Binding $parent[Window].DataContext.RemoveParamCommand }"
+                                                    Command="{Binding $parent[Window].DataContext.RemoveHeaderCommand}"
                                                     CommandParameter="{Binding #Key.Text}">
                                                 <Path
                                                     Fill="{Binding $parent[Button].Foreground}"
@@ -217,13 +217,13 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock>KEY:</TextBlock>
                                             <TextBox Grid.Column="1"
-                                                IsReadOnly="True"
-                                                Text="{Binding Key}"
-                                                Name="Key" />
+                                                     IsReadOnly="True"
+                                                     Text="{Binding Key}"
+                                                     Name="Key" />
                                             <TextBlock Grid.Column="2">VALUE:</TextBlock>
                                             <TextBox Grid.Column="3"
-                                                IsReadOnly="True"
-                                                Text="{Binding Value}" />
+                                                     IsReadOnly="True"
+                                                     Text="{Binding Value}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -237,20 +237,18 @@
                                                 Margin="5">
                                         <RadioButton
                                             GroupName="ResponseType"
-                                            IsChecked="True">
+                                            IsChecked="{Binding IsText}">
                                             Text
                                         </RadioButton>
                                         <RadioButton
-                                            GroupName="ResponseType">
+                                            GroupName="ResponseType"
+                                            IsChecked="{Binding IsJson}">
                                             Json
                                         </RadioButton>
                                         <RadioButton
-                                            GroupName="ResponseType">
+                                            GroupName="ResponseType"
+                                            IsChecked="{Binding IsXml}">
                                             Xml
-                                        </RadioButton>
-                                        <RadioButton
-                                            GroupName="ResponseType">
-                                            RowContent
                                         </RadioButton>
                                     </StackPanel>
                                     <Button Margin="5" Grid.Column="2">
