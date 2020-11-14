@@ -15,7 +15,8 @@
         Title="NeBrowser">
 
     <Window.Resources>
-        <converter:HighlightingDefinitionConverter x:Key="HighlightingConverter" />
+        <converter:HighlightingDefinitionConverter
+            x:Key="HighlightingConverter" />
     </Window.Resources>
     <NativeMenu.Menu>
         <NativeMenu>
@@ -106,11 +107,11 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock>KEY:</TextBlock>
                                             <TextBox Grid.Column="1"
-                                                     Text="{Binding Key}"
-                                                     Name="Key" />
+                                                Text="{Binding Key}"
+                                                Name="Key" />
                                             <TextBlock Grid.Column="2">VALUE:</TextBlock>
                                             <TextBox Grid.Column="3"
-                                                     Text="{Binding Value}" />
+                                                Text="{Binding Value}" />
                                             <Button Grid.Column="4"
                                                     Margin="5, 0, 0, 0"
                                                     Command="{Binding $parent[Window].DataContext.RemoveParamCommand }"
@@ -155,14 +156,14 @@
                                                     Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <CheckBox Margin="0, 0, 5 ,0"
-                                                      IsChecked="{Binding IsUseful}" />
+                                                IsChecked="{Binding IsUseful}" />
                                             <TextBlock Grid.Column="1">KEY:</TextBlock>
                                             <TextBox Grid.Column="2"
-                                                     Text="{Binding Key}"
-                                                     Name="Key" />
+                                                Text="{Binding Key}"
+                                                Name="Key" />
                                             <TextBlock Grid.Column="3">VALUE:</TextBlock>
                                             <TextBox Grid.Column="4"
-                                                     Text="{Binding Value}" />
+                                                Text="{Binding Value}" />
                                             <Button Grid.Column="5"
                                                     Margin="5, 0, 0, 0"
                                                     Command="{Binding $parent[Window].DataContext.RemoveHeaderCommand}"
@@ -217,13 +218,13 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock>KEY:</TextBlock>
                                             <TextBox Grid.Column="1"
-                                                     IsReadOnly="True"
-                                                     Text="{Binding Key}"
-                                                     Name="Key" />
+                                                IsReadOnly="True"
+                                                Text="{Binding Key}"
+                                                Name="Key" />
                                             <TextBlock Grid.Column="2">VALUE:</TextBlock>
                                             <TextBox Grid.Column="3"
-                                                     IsReadOnly="True"
-                                                     Text="{Binding Value}" />
+                                                IsReadOnly="True"
+                                                Text="{Binding Value}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -258,7 +259,7 @@
                                 <controls:BindableTextEditor
                                     Grid.Row="2"
                                     IsReadOnly="True"
-                                    SyntaxHighlighting="Text"
+                                    SyntaxHighlighting="{Binding Highlighting, Converter={StaticResource  HighlightingConverter}}"
                                     ShowLineNumbers="True"
                                     BindingText="{Binding ResponseBody}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"

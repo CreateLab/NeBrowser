@@ -40,6 +40,13 @@ namespace NeBrowser.ViewModels
 		private bool _isSucceedRequest;
 		private CancellationTokenSource _source;
 		private Data _selectData = Data.Row;
+		private string _highlighting;
+
+		public string Highlighting
+		{
+			get => _highlighting;
+			set => this.RaiseAndSetIfChanged(ref _highlighting, value);
+		}
 
 		public bool IsText
 		{
@@ -256,6 +263,7 @@ namespace NeBrowser.ViewModels
 		private async Task SendRequest()
 		{
 			var res = await Send();
+			if(res is null) return;
 			StatusCode = res.StatusCode;
 			ResponseHeadersParams.Clear();
 			ResponseHeadersParams.AddRange(res.Headers.Select(h => new Param
@@ -307,7 +315,17 @@ namespace NeBrowser.ViewModels
 				_ => null
 			};
 
-			var url = new Url(_url);
+			Url url;
+			try
+			{
+				url = new Url(_url.Trim());
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				return null;
+			}
+				
 			foreach (var header in RequestHeadersParams.Where(h => h.IsUseful))
 			{
 				url.WithHeader(header.Key, header.Value);
@@ -343,10 +361,19 @@ namespace NeBrowser.ViewModels
 		private string ConvertData()
 		{
 			var s = new string(_data);
-			if (IsXml && BeautifyHelper.TryBeautifyXml(ref s)) 
+			if (IsXml && BeautifyHelper.TryBeautifyXml(ref s))
+			{
+				Highlighting = "XML";
 				return s;
-			if (IsJson && BeautifyHelper.TryBeautifyJson(ref s)) 
+			}
+
+			if (IsJson && BeautifyHelper.TryBeautifyJson(ref s))
+			{
+				Highlighting = "JavaScript";
 				return s;
+			}
+
+			Highlighting = "Text";
 			return IsText ? s : "invalid format set text to data";
 		}
 	}
