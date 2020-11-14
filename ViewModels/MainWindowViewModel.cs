@@ -36,7 +36,7 @@ namespace NeBrowser.ViewModels
 		private int? _statusCode;
 		private bool _isSucceedRequest;
 		private CancellationTokenSource _source;
-
+		private Data _selectData = Data.Row;
 		public bool IsSuceedRequest
 		{
 			get => _isSucceedRequest;

@@ -6,13 +6,17 @@
         xmlns:viewModels="clr-namespace:NeBrowser.ViewModels"
         xmlns:controls="clr-namespace:NeBrowser.Controls"
         xmlns:views="clr-namespace:NeBrowser.Views"
+        xmlns:converter="clr-namespace:NeBrowser.Converter"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NeBrowser.Views.MainWindow"
         WindowStartupLocation="CenterScreen"
         Icon="/Assets/avalonia-logo.ico"
         Title="NeBrowser">
-
+    
+    <Window.Resources>
+        <converter:HighlightingDefinitionConverter x:Key="HighlightingConverter"/>
+    </Window.Resources>
     <NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="File">
@@ -256,6 +260,7 @@
                                 <controls:BindableTextEditor
                                     Grid.Row="2"
                                     IsReadOnly="True"
+                                    SyntaxHighlighting="Text"
                                     ShowLineNumbers="True"
                                     BindingText="{Binding ResponseBody}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -265,7 +270,7 @@
                         <TabItem Header="Cookies" />
                     </TabControl>
                 </Grid>
-                <Grid Grid.Row="2"
+                <Grid Grid.Column="2"
                       Background="{DynamicResource MaterialDesignPaper}"
                       Opacity="0.85"
                       IsVisible="{Binding IsSending}"
