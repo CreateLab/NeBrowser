@@ -191,7 +191,7 @@
                     <TabItem Header="Body">
                         <TextBox Text="{Binding RequestBody}" />
                     </TabItem>
-                    <TabItem Header="Cookies" />
+                    <TabItem Header="Cookies" IsEnabled="False" />
                 </TabControl>
                 <GridSplitter Grid.Column="1" Width="3" Margin="5, 0, 5, 0" />
                 <Grid Grid.Column="2" RowDefinitions="Auto, *">
@@ -266,7 +266,7 @@
                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Cookies" />
+                        <TabItem Header="Cookies" IsEnabled="False"/>
                     </TabControl>
                 </Grid>
                 <Grid Grid.Column="2"
