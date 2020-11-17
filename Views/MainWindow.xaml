@@ -270,7 +270,7 @@
                                             Xml
                                         </RadioButton>
                                     </StackPanel>
-                                    <Button Margin="5" Grid.Column="2">
+                                    <Button Margin="5" Grid.Column="2" Command="{Binding SaveFileCommand}">
                                         Save Response
                                     </Button>
                                 </Grid>

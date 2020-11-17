@@ -16,6 +16,8 @@
         <Compile Update="Views\Setting.xaml.cs">
           <DependentUpon>Setting.xaml</DependentUpon>
         </Compile>
+        <AvaloniaResource Remove="NeBrowser\**" />
+        <Compile Remove="NeBrowser\**" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.10.0-preview6" />
@@ -30,5 +32,14 @@
         <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.2-dev-10281" />
         <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00839" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0-dev-00905" />
+    </ItemGroup>
+    <ItemGroup>
+      <AvaloniaXaml Remove="NeBrowser\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Remove="NeBrowser\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="NeBrowser\**" />
     </ItemGroup>
 </Project>
