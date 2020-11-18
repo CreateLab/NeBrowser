@@ -14,14 +14,28 @@ namespace NeBrowser.Controls
 		/// </summary>
 		private string _text;
 
+		private bool _isAvailableRowSize;
+
+		public bool IsAvailableRowSize
+		{
+			get => _isAvailableRowSize;
+			set => SetAndRaise(BindingIsAvailableRowSizeProperty, ref _isAvailableRowSize, value);
+		}
 		public string BindingText
 		{
 			get => _text;
 			set
 			{
-				if (value != null)
+				if (value != null )
 				{
-					TextArea.Document.Text = value;
+					var pos = value.IndexOf("\n", StringComparison.Ordinal);
+					if (pos < 2000 || value.Length < 2000) 
+						TextArea.Document.Text = value;
+					else
+					{
+						TextArea.Document.Text = string.Empty;
+						IsAvailableRowSize = false;
+					}
 				}
 					
 				SetAndRaise(BindingTextProperty, ref _text, value);
@@ -38,5 +52,12 @@ namespace NeBrowser.Controls
 					editor => editor.BindingText,
 					(editor, s) => editor.BindingText = s,
 					default(string), BindingMode.TwoWay);
+		public static readonly DirectProperty<BindableTextEditor, bool>
+			BindingIsAvailableRowSizeProperty =
+				AvaloniaProperty.RegisterDirect<BindableTextEditor, bool>(
+					nameof(IsAvailableRowSize),
+					editor => editor.IsAvailableRowSize,
+					(editor, b) => editor.IsAvailableRowSize = b,
+					true, BindingMode.TwoWay);
 	}
 }

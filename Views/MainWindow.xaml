@@ -269,6 +269,11 @@
                                             IsChecked="{Binding IsXml}">
                                             Xml
                                         </RadioButton>
+                                        <RadioButton
+                                            GroupName="ResponseType"
+                                            IsChecked="{Binding IsRowData}">
+                                            Row Data
+                                        </RadioButton>
                                     </StackPanel>
                                     <Button Margin="5" Grid.Column="2" Command="{Binding SaveFileCommand}">
                                         Save Response

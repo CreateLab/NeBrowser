@@ -34,7 +34,7 @@ namespace NeBrowser.ViewModels
 		private string _data;
 		private string _requestBodyText;
 		private bool _isSending;
-		private bool _isText, _isXML, _isJSON;
+		private bool _isText, _isXML, _isJSON, _isRow;
 		private readonly ObservableAsPropertyHelper<string> _responseBody;
 		private int? _statusCode;
 		private bool _isSucceedRequest;
@@ -71,6 +71,15 @@ namespace NeBrowser.ViewModels
 				if (value) ConvertDataCommand.Execute().Wait();
 			}
 		}
+		public bool IsRowData
+		{
+			get => _isRow;
+			set
+			{
+				this.RaiseAndSetIfChanged(ref _isRow, value);
+				if (value) ConvertDataCommand.Execute().Wait();
+			}
+		}
 
 		public bool IsXml
 		{
@@ -78,7 +87,8 @@ namespace NeBrowser.ViewModels
 			set
 			{
 				this.RaiseAndSetIfChanged(ref _isXML, value);
-				if (value) ConvertDataCommand.Execute().Wait();
+				if (value) 
+					ConvertDataCommand.Execute().Wait();
 			}
 		}
 
@@ -98,7 +108,7 @@ namespace NeBrowser.ViewModels
 			set
 			{
 				this.RaiseAndSetIfChanged(ref _isSucceedRequest, value);
-				if (value) ConvertDataCommand.Execute();
+				if (value) ConvertDataCommand.Execute().Wait();
 			}
 		}
 
@@ -399,6 +409,11 @@ namespace NeBrowser.ViewModels
 				BeautifyHelper.TryBeautifyJson(ref s);
 				Highlighting = "JavaScript";
 				return s;
+			}
+
+			if (IsText)
+			{
+				
 			}
 
 			Highlighting = "Text";
