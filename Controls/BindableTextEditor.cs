@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Data;
 using AvaloniaEdit;
+using Serilog;
 
 namespace NeBrowser.Controls
 {
@@ -29,8 +30,19 @@ namespace NeBrowser.Controls
 				if (value != null )
 				{
 					var pos = value.IndexOf("\n", StringComparison.Ordinal);
-					if (pos < 2000 || value.Length < 2000) 
-						TextArea.Document.Text = value;
+					if (pos < 2000 || value.Length < 2000)
+						try
+						{
+							TextArea.Document.Text = value;
+							IsAvailableRowSize = true;
+						}
+						catch (Exception e)
+						{
+							Log.Error(e.Message);
+							TextArea.Document.Text = string.Empty;
+							IsAvailableRowSize = false;
+						}
+						
 					else
 					{
 						TextArea.Document.Text = string.Empty;
