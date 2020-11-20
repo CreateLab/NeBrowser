@@ -47,6 +47,7 @@ namespace NeBrowser.Controls
 					{
 						TextArea.Document.Text = string.Empty;
 						IsAvailableRowSize = false;
+						Log.Information("First \\n so far from start");
 					}
 				}
 					

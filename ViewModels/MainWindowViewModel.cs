@@ -269,10 +269,10 @@ namespace NeBrowser.ViewModels
 
 		private void UpdateParams(string url)
 		{
-			// //var qObj = HttpUtility.ParseQueryString(new Uri(_url).Query);
-			// QueryParams.Clear();
-			// QueryParams.AddRange(qObj.AllKeys.Select(key =>
-			// 	new Param {Key = key, Value = qObj[key]}));
+			var qObj = HttpUtility.ParseQueryString(new Uri(_url).Query);
+			QueryParams.Clear();
+			 QueryParams.AddRange(qObj.AllKeys.Select(key =>
+			 	new Param {Key = key, Value = qObj[key]}));
 		}
 
 		private void UpdateUrl(IReadOnlyCollection<Param> headers)
@@ -316,7 +316,7 @@ namespace NeBrowser.ViewModels
 				})
 			};
 			var data = JsonConvert.SerializeObject(m);
-			//await File.WriteAllTextAsync(PathConstant.StatePath, data);
+			await File.WriteAllTextAsync(PathConstant.StatePath, data);
 		}
 
 		private async Task ShowSetting()
@@ -336,7 +336,7 @@ namespace NeBrowser.ViewModels
 				RequestEnum.PUT => HttpMethod.Put,
 				RequestEnum.OPTIONS => HttpMethod.Options,
 				RequestEnum.HEAD => HttpMethod.Head,
-				//RequestEnum.PATCH => HttpMethod.Patch,
+				RequestEnum.PATCH => HttpMethod.Patch,
 				RequestEnum.DELETE => HttpMethod.Delete,
 				RequestEnum.TRACE => HttpMethod.Trace,
 				_ => null
@@ -390,13 +390,13 @@ namespace NeBrowser.ViewModels
 			var result = await dialog.ShowAsync(_mainWindow);
 			if (result != null)
 			{
-			//	await File.WriteAllTextAsync(result, _responseBody.Value);
+				await File.WriteAllTextAsync(result, _responseBody.Value);
 			}
 		}
 
 		private string ConvertData()
 		{
-			var s = "fsdf";
+			var s = new string(_data);
 			if (IsXml)
 			{
 				BeautifyHelper.TryBeautifyXml(ref s);
@@ -406,7 +406,7 @@ namespace NeBrowser.ViewModels
 
 			if (IsJson)
 			{
-				//BeautifyHelper.TryBeautifyJson(ref s);
+				BeautifyHelper.TryBeautifyJson(ref s);
 				Highlighting = "JavaScript";
 				return s;
 			}
